@@ -3,8 +3,8 @@ require "db_connection.php";
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = ($_POST['name']);
-    $email = ($_POST['email']);
+    $name = trim($_POST['name']);
+    $email = strtolower(trim($_POST['email'])); 
     $password = md5($_POST['password']); 
 
     $stmt_check = $con->prepare("SELECT id FROM users WHERE email = ?");
@@ -14,19 +14,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($stmt_check->num_rows > 0) {
         echo "<script>
-                alert('Email already registered! Try logging in.');
+                alert('Email already registered! Please try logging in.');
                 document.location = 'login.php';
               </script>";
-        exit();
+        exit(); 
     }
     $stmt_check->close();
+
 
     $stmt = $con->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
     $stmt->bind_param("sss", $name, $email, $password);
 
     if ($stmt->execute()) {
         echo "<script>
-                alert('New user added successfully! Please Log In.');
+                alert('New user added successfully! Please log in.');
                 document.location = 'login.php';
               </script>";
     } else {
@@ -35,6 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->close();
 }
 ?>
+
 
 
 <!DOCTYPE html>

@@ -3,8 +3,8 @@ require "db_connection.php";
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = trim($_POST['name']);
-    $email = trim($_POST['email']);
+    $name = ($_POST['name']);
+    $email = ($_POST['email']);
     $password = md5($_POST['password']); 
 
     $stmt_check = $con->prepare("SELECT id FROM users WHERE email = ?");

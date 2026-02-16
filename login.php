@@ -2,22 +2,22 @@
 require "db_connection.php";
 session_start();
 
-function error_alert($url)
-{
-    echo "
-    <script>
-      alert('Incorrect username/password. Please try again.');
-      document.location = '$url';
-    </script>";
+function error_alert($url) {
+    echo "<script>
+            alert('Incorrect username/password. Please try again.');
+            document.location = '$url';
+          </script>";
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
-    $password = $_POST['password'];
+    $password = md5($_POST['password']); 
+
     $stmt = $con->prepare("SELECT id, name FROM users WHERE email = ? AND password = ?");
     $stmt->bind_param("ss", $email, $password);
     $stmt->execute();
     $stmt->store_result();
+
     if ($stmt->num_rows > 0) {
         $stmt->bind_result($id, $name);
         $stmt->fetch();
@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h1>Welcome to CSCI 4060</h1>
         <h2>Login with your credentials</h2>
         <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-            <input type="text" name="email" placeholder="Enter your email" required><br><br>
+            <input type="email" name="email" placeholder="Enter your email" required><br><br>
             <input type="password" name="password" placeholder="Enter your password" required><br><br>
             <input type="submit" id="submit_btn" name="log_in_btn" value="Log In">
         </form>

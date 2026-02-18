@@ -24,7 +24,7 @@
 
 <html>
   <head>
-    <link rel="stylesheet" href="custom_style.css">
+    <link rel="stylesheet" href="../custom_style.css">
   </head>
   <body>
   <div id="cookie_div">
